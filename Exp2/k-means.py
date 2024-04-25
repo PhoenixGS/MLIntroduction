@@ -35,13 +35,13 @@ class k_means:
     
     def iterate(self):
         for c in range(self.k):
-            #self.centers[c] = np.mean(self.data[np.argwhere(self.label == c)], axis=0)
+            # self.centers[c] = np.mean(self.data[np.argwhere(self.label == c)], axis=0)
             if np.sum(self.label == c) == 0:
                 assert(False)
             index = np.argwhere(self.label == c)
             index = index.reshape(index.shape[0])
             center = np.mean(self.data[index], axis=0)
-            #self.centers[c] = self.data[np.argmin([np.linalg.norm(center - self.data[i]) for i in range(len(self.data))])]
+            # self.centers[c] = self.data[np.argmin([np.linalg.norm(center - self.data[i]) for i in range(len(self.data))])]
             self.centers[c] = center
         self.update_label()
 
@@ -67,8 +67,12 @@ if __name__ == '__main__':
     labels = np.array(labels, dtype=np.float)
     kmeans = k_means(images, k=10)
     
+    pre_maxd = np.inf
     while kmeans.max_distance() > 1:
         kmeans.iterate()
-        print(kmeans.max_distance())
-        print("Accuracy:", np.sum(kmeans.calc_label(labels) == labels) / len(labels))
-    
+        if kmeans.max_distance() >= pre_maxd:
+            break
+        pre_maxd = kmeans.max_distance()
+
+    print(kmeans.max_distance())
+    print("Accuracy:", np.sum(kmeans.calc_label(labels) == labels) / len(labels))
