@@ -1,0 +1,7 @@
+姓名：方科晨
+学号：2021013400
+联系方式：fkc21@mails.tsinghua.edu.cn
+代码运行方式：
+可能需要安装的库：numpy, matplotlib, sklearn, torch, torchvision
+在k-means.py中的66行可以指定k-means的k值，然后直接运行python k-means.py即可。
+代码会输出每一轮迭代的max-distance和accuracy，以及最终的accuracy，同时还会可视化输出聚类结果。
