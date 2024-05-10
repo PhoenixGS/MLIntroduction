@@ -12,7 +12,7 @@ def arg_parser():
     parser.add_argument('--n', type=int, default=10)
     parser.add_argument('--ratio', type=float, default=0.5)
     parser.add_argument('--regressor', type=str, default='svm')
-    parser.add_argument('--vectorizer', type=str, default='count')
+    parser.add_argument('--vectorizer', type=str, default='tfidf')
     parser.add_argument('--ensemble', type=str, default='bagging')
     return parser.parse_args()
 
@@ -21,6 +21,11 @@ if __name__ == '__main__':
     args = arg_parser()
 
     X_train, y_train, X_test, y_test = get_data()
+    # train, test, vectorizer = get_data(args.vectorizer)
+    # X_train = train['reviewText']
+    # y_train = train['overall']
+    # X_test = test['reviewText']
+    # y_test = test['overall']
 
     if args.regressor == 'svm':
         regressor = svm.SVR()

@@ -5,7 +5,7 @@ import random
 import pickle
 import numpy as np
 
-def get_vectorizer(vectorizer_type='count'):
+def select_vectorizer(vectorizer_type='count'):
     if vectorizer_type == 'count':
         return CountVectorizer()
     elif vectorizer_type == 'tfidf':
@@ -24,11 +24,13 @@ def process_data(df, vectorizer):
     # df['summary'] = df['summary'].astype(str)
     # df['reviewText'] = df['reviewText'].astype(str)
     # matrix = vectorizer.fit_transform(list(df['reviewerID'] + ' ' + df['asin'] + ' ' + df['summary'] + ' ' + df['reviewText']))
-    X = vectorizer.transform(list(df['reviewText'])).toarray()
+    X = vectorizer.transform(list(df['reviewText']))
+    print("XShape")
+    print(X.dtype)
     # df['overall'] = df['overall'].astype(int)
     y = list(df['overall'])
     # return X, y
-    return np.array(X), np.array(y)
+    return X, y
 
 def get_data(vectorizer_type='count'):
     print("Reading data...")
@@ -42,11 +44,12 @@ def get_data(vectorizer_type='count'):
         with open('vectorizer_%s.pkl' % vectorizer_type, 'rb') as f:
             vectorizer = pickle.load(f)
     else:
-        vectorizer = get_vectorizer(vectorizer_type)
+        vectorizer = select_vectorizer(vectorizer_type)
         vectorizer = vectorizer.fit(list(train['reviewText']))
         with open('vectorizer_%s.pkl' % vectorizer_type, 'wb') as f:
             pickle.dump(vectorizer, f)
-
+    
+    # return train, test, vectorizer
     print("Processing data...")
     X_train, y_train = process_data(train, vectorizer)
     X_test, y_test = process_data(test, vectorizer)
