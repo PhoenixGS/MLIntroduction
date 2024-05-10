@@ -81,3 +81,13 @@ def get_data(vectorizer_type='count'):
     #     test_data.to_csv('test_%s.csv' % vectorizer_type, index=False)
 
     # return X_train, y_train, X_test, y_test
+
+def calc_weighted_median(y, w):
+    assert(len(y) == len(w))
+    w = w / np.sum(w)
+    sorted_idx = np.argsort(y)
+    y_sorted = y[sorted_idx]
+    w_sorted = w[sorted_idx]
+    cumsum = np.cumsum(w_sorted)
+    median_idx = np.searchsorted(cumsum, 0.5)
+    return y_sorted[median_idx]

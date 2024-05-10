@@ -14,6 +14,7 @@ def arg_parser():
     parser.add_argument('--regressor', type=str, default='svm')
     parser.add_argument('--vectorizer', type=str, default='tfidf')
     parser.add_argument('--ensemble', type=str, default='bagging')
+    parser.add_argument('--max_depth', type=int, default=5)
     return parser.parse_args()
 
 
@@ -28,14 +29,14 @@ if __name__ == '__main__':
     # y_test = test['overall']
 
     if args.regressor == 'svm':
-        regressor = svm.SVR()
+        regressor = svm.LinearSVR()
     elif args.regressor == 'tree':
-        regressor = tree.DecisionTreeRegressor()
+        regressor = tree.DecisionTreeRegressor(max_depth=args.max_depth)
 
     if args.ensemble == 'bagging':
         ensemble = Bagging(args.n, args.ratio, regressor)
     elif args.ensemble == 'adaboost':
-        ensemble = AdaBoost(args.n, args.ratio, regressor)
+        ensemble = AdaBoost(args.n, regressor)
 
     ensemble.fit(X_train, y_train)
     y_pred = ensemble.predict(X_test)
