@@ -14,7 +14,7 @@ def arg_parser():
     parser.add_argument('--regressor', type=str, default='svm')
     parser.add_argument('--vectorizer', type=str, default='tfidf')
     parser.add_argument('--ensemble', type=str, default='bagging')
-    parser.add_argument('--max_depth', type=int, default=5)
+    parser.add_argument('--max_depth', type=int, default=20)
     return parser.parse_args()
 
 
@@ -44,3 +44,6 @@ if __name__ == '__main__':
     mse = np.mean((y_pred - y_test) ** 2)
     rmse = np.sqrt(mse)
     print("MSE: %.4f, RMSE: %.4f" % (mse, rmse))
+
+    print(y_pred[:10])
+    print(y_test[:10])

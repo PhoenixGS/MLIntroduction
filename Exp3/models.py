@@ -13,9 +13,9 @@ class Bagging:
         self.regressor = regressor
 
     def fit(self, X, y):
-        if os.path.exists('regressors_%s_%s_%s_%s.pkl' % (self, self.n, self.ratio, self.regressor)):
+        if os.path.exists('regressors_%s_%s_%s_%s.pkl' % (self.__class__.__name__, self.n, self.ratio, self.regressor.__class__.__name__)):
             print('Loading regressors...')
-            with open('regressors_%s_%s_%s_%s.pkl' % (self, self.n, self.ratio, self.regressor), 'rb') as f:
+            with open('regressors_%s_%s_%s_%s.pkl' % (self.__class__.__name__, self.n, self.ratio, self.regressor.__class__.__name__), 'rb') as f:
                 self.regressors = pickle.load(f)
         else:
             print('Fitting regressors...')
@@ -31,7 +31,7 @@ class Bagging:
                 print("Fitting regressor %d" % i)
                 regressor.fit(X_sample, y_sample)
                 self.regressors.append(regressor)
-            with open('regressors_%s_%s_%s_%s.pkl' % (self, self.n, self.ratio, self.regressor), 'wb') as f:
+            with open('regressors_%s_%s_%s_%s.pkl' % (self.__class__.__name__, self.n, self.ratio, self.regressor.__class__.__name__), 'wb') as f:
                 pickle.dump(self.regressors, f)
 
     def predict(self, X):
@@ -63,12 +63,14 @@ class AdaBoost:
             for i in range(self.n):
                 print("Fitting regressor %d" % i)
                 regressor = copy.deepcopy(self.regressor)
-                regressor.fit(X, y, sample_weight=w)
+                # regressor.fit(X, y, sample_weight=w)
+                regressor.fit(X, y)
                 y_pred = regressor.predict(X)
                 Em = np.max(np.abs(y_pred - y))
                 emi = np.abs(y_pred - y) / Em
                 em = np.sum(w * emi)
-                alpha = 0.5 * np.log((1 - em) / em)
+                #alpha = 0.5 * np.log((1 - em) / em)
+                alpha = (1 - em) / em
                 w = w * np.exp(1 - emi) / np.sum(w * np.exp(1 - emi))
                 assert(np.abs(np.sum(w) - 1) < 1e-6)
                 self.regressors.append(regressor)
@@ -77,6 +79,7 @@ class AdaBoost:
                 pickle.dump(self.regressors, f)
             with open('alphas_%s_%s_%s.pkl' % (self.__class__.__name__, self.n, self.regressor.__class__.__name__), 'wb') as f:
                 pickle.dump(self.alphas, f)
+        print("alphas: ", self.alphas[:10])
 
     def predict(self, X):
         print('Predicting...')
@@ -85,6 +88,7 @@ class AdaBoost:
             y_pred.append(regressor.predict(X))
         y_pred = np.array(y_pred)
         y_pred = y_pred.T
+        print(y_pred[:10])
         y_res = []
         for i in range(len(y_pred)):
             y_res.append(calc_weighted_median(y_pred[i], np.log(1 / np.array(self.alphas))))
