@@ -92,7 +92,6 @@ class AdaBoost:
                 pickle.dump(self.regressors, f)
             with open('alphas_%s_%s_%s.pkl' % (self.__class__.__name__, self.n, self.regressor.__class__.__name__), 'wb') as f:
                 pickle.dump(self.alphas, f)
-        print("alphas: ", self.alphas[:10])
 
     def predict(self, X):
         print('Predicting...')
@@ -101,7 +100,6 @@ class AdaBoost:
             y_pred.append(regressor.predict(X))
         y_pred = np.array(y_pred)
         y_pred = y_pred.T
-        print(y_pred[:10])
         y_res = []
         for i in range(len(y_pred)):
             y_res.append(calc_weighted_median(y_pred[i], np.log(1 / np.array(self.alphas))))

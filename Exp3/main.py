@@ -46,6 +46,3 @@ if __name__ == '__main__':
     mse = np.mean((y_pred - y_test) ** 2)
     rmse = np.sqrt(mse)
     print("MAE: %.4f, MSE: %.4f, RMSE: %.4f" % (mae, mse, rmse))
-
-    print(y_pred[:10])
-    print(y_test[:10])
