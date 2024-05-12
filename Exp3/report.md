@@ -16,6 +16,48 @@
 
 ## 实验结果
 
+### Baseline
+使用以下命令运行实验
+```bash
+python main.py --regressor svm --ensemble baseline
+python main.py --regressor tree --ensemble baseline
+```
+得到的结果如下：
+
+|基回归器|MAE|MSE|RMSE|
+|---|---|---|---|
+|LinearSVR|0.8181|1.4875|1.2196|
+|DecisionTreeRegressor|0.7500|1.0916|1.0448|
+
+### Bagging集成
+
+参数选择为 $n=5, ratio=0.8$ 
+使用以下命令运行实验
+```bash
+python main.py --n 5 --ratio 0.8 --regressor svm --ensemble bagging
+python main.py --n 5 --ratio 0.8 --regressor tree --ensemble bagging
+```
+
+|基回归器|MAE|MSE|RMSE|
+|---|---|---|---|
+|LinearSVR|0.8112|1.4114|1.1880|
+|DecisionTreeRegressor|0.7323|0.9765|0.9882|
+
+### Adaboost集成
+
+参数选择为 $n=5$
+使用以下命令运行实验
+```bash
+python main.py --n 5 --regressor svm --ensemble adaboost
+python main.py --n 5 --regressor tree --ensemble adaboost
+```
+
+|基回归器|MAE|MSE|RMSE|
+|---|---|---|---|
+|LinearSVR|0.8037|1.4728|1.2136|
+|DecisionTreeRegressor|0.7044|1.0577|1.0284|
+
+
 ## 实验分析
 
 ## 实验讨论
