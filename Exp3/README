@@ -3,6 +3,7 @@
 联系方式：fkc21@mails.tsinghua.edu.cn
 代码运行方式：
 可能需要安装的库：numpy, sklearn, pickle, pandas, argparse
+将 `exp3-reviews.csv` 放于和代码同一目录下
 在命令行中运行：`python main.py [options]`
 options:
 	--n : 基回归器数量，默认为10
