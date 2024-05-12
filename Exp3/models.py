@@ -6,6 +6,25 @@ from sklearn.utils import resample
 from sklearn import svm, tree
 from utils import calc_weighted_median
 
+class Baseline:
+    def __init__(self, regressor):
+        self.regressor = regressor
+
+    def fit(self, X, y):
+        if os.path.exists('regressor_%s_%s.pkl' % (self.__class__.__name__, self.regressor.__class__.__name__)):
+            print('Loading regressor...')
+            with open('regressor_%s_%s.pkl' % (self.__class__.__name__, self.regressor.__class__.__name__), 'rb') as f:
+                self.regressor = pickle.load(f)
+        else:
+            print('Fitting regressor...')
+            self.regressor.fit(X, y)
+            with open('regressor_%s_%s.pkl' % (self.__class__.__name__, self.regressor.__class__.__name__), 'wb') as f:
+                pickle.dump(self.regressor, f)
+
+    def predict(self, X):
+        print('Predicting...')
+        return self.regressor.predict(X)
+
 class Bagging:
     def __init__(self, n, ratio, regressor):
         self.n = n
@@ -21,12 +40,7 @@ class Bagging:
             print('Fitting regressors...')
             self.regressors = []
             for i in range(self.n):
-                # idx = np.random.choice(len(y), int(self.ratio * len(y)), replace=True)
-                # X_sample = X[idx]
-                # y_sample = y[idx]
-                print(X.shape, len(y))
-                X_sample, y_sample = resample(X, y, n_samples=int(self.ratio * len(y)), replace=True)
-                print(X_sample.shape, len(y_sample))
+                X_sample, y_sample = resample(X, y, n_samples=int(self.ratio * len(y)), replace=True, random_state=i)
                 regressor = copy.deepcopy(self.regressor)
                 print("Fitting regressor %d" % i)
                 regressor.fit(X_sample, y_sample)
@@ -63,8 +77,7 @@ class AdaBoost:
             for i in range(self.n):
                 print("Fitting regressor %d" % i)
                 regressor = copy.deepcopy(self.regressor)
-                # regressor.fit(X, y, sample_weight=w)
-                regressor.fit(X, y)
+                regressor.fit(X, y, sample_weight=w * len(y))
                 y_pred = regressor.predict(X)
                 Em = np.max(np.abs(y_pred - y))
                 emi = np.abs(y_pred - y) / Em

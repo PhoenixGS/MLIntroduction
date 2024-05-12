@@ -14,7 +14,7 @@ def select_vectorizer(vectorizer_type='count'):
         raise ValueError('Invalid vectorizer type: {}'.format(vectorizer_type))
 
 def split_data(df, ratio=0.9):
-    train = df.sample(frac=ratio)
+    train = df.sample(frac=ratio, random_state=0)
     test = df.drop(train.index)
     return train, test
 
@@ -40,7 +40,6 @@ def get_data(vectorizer_type='count'):
         with open('vectorizer_%s.pkl' % vectorizer_type, 'wb') as f:
             pickle.dump(vectorizer, f)
     
-    # return train, test, vectorizer
     print("Processing data...")
     X_train, y_train = process_data(train, vectorizer)
     X_test, y_test = process_data(test, vectorizer)
