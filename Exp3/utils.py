@@ -19,17 +19,8 @@ def split_data(df, ratio=0.9):
     return train, test
 
 def process_data(df, vectorizer):
-    # df['reviewerID'] = df['reviewerID'].astype(str)
-    # df['asin'] = df['asin'].astype(str)
-    # df['summary'] = df['summary'].astype(str)
-    # df['reviewText'] = df['reviewText'].astype(str)
-    # matrix = vectorizer.fit_transform(list(df['reviewerID'] + ' ' + df['asin'] + ' ' + df['summary'] + ' ' + df['reviewText']))
     X = vectorizer.transform(list(df['reviewText']))
-    print("XShape")
-    print(X.dtype)
-    # df['overall'] = df['overall'].astype(int)
     y = list(df['overall'])
-    # return X, y
     return X, y
 
 def get_data(vectorizer_type='count'):
@@ -55,32 +46,6 @@ def get_data(vectorizer_type='count'):
     X_test, y_test = process_data(test, vectorizer)
 
     return X_train, y_train, X_test, y_test
-
-
-
-    # if os.path.exists('train_%s.csv' % vectorizer_type) and os.path.exists('test_%s.csv' % vectorizer_type):
-    #     train_data = pd.read_csv('train_%s.csv' % vectorizer_type)
-    #     test_data = pd.read_csv('test_%s.csv' % vectorizer_type)
-
-    #     X_train = train_data.drop('overall', axis=1).values
-    #     y_train = train_data['overall'].values
-    #     X_test = test_data.drop('overall', axis=1).values
-    #     y_test = test_data['overall'].values
-    # else:
-    #     random.seed(0)
-    #     train, test = split_data(df)
-    #     X_train, y_train = process_data(train)
-    #     X_test, y_test = process_data(test)
-
-    #     train_data = pd.DataFrame(X_train)
-    #     train_data['overall'] = y_train
-    #     train_data.to_csv('train_%s.csv' % vectorizer_type, index=False)
-
-    #     test_data = pd.DataFrame(X_test)
-    #     test_data['overall'] = y_test
-    #     test_data.to_csv('test_%s.csv' % vectorizer_type, index=False)
-
-    # return X_train, y_train, X_test, y_test
 
 def calc_weighted_median(y, w):
     assert(len(y) == len(w))
