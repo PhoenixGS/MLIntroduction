@@ -43,7 +43,31 @@ python main.py --n 5 --ratio 0.8 --regressor tree --ensemble bagging
 |LinearSVR|0.8112|1.4114|1.1880|
 |DecisionTreeRegressor|0.7323|0.9765|0.9882|
 
-### Adaboost集成
+参数选择为 $n=5, ratio=0.5$
+使用以下命令运行实验
+```bash
+python main.py --n 5 --ratio 0.5 --regressor svm --ensemble bagging
+python main.py --n 5 --ratio 0.5 --regressor tree --ensemble bagging
+```
+
+|基回归器|MAE|MSE|RMSE|
+|---|---|---|---|
+|LinearSVR|0.8071|1.3774|1.1736|
+|DecisionTreeRegressor|0.8112|1.4114|1.1880|
+
+参数选择为 $n=10, ratio=0.8$
+使用以下命令运行实验
+```bash
+python main.py --n 10 --ratio 0.8 --regressor svm --ensemble bagging
+python main.py --n 10 --ratio 0.8 --regressor tree --ensemble bagging
+```
+
+|基回归器|MAE|MSE|RMSE|
+|---|---|---|---|
+|LinearSVR|0.7949|1.3510|1.1623|
+|DecisionTreeRegressor|0.7269|0.9561|0.9778|
+
+### AdaBoost集成
 
 参数选择为 $n=5$
 使用以下命令运行实验
@@ -57,7 +81,25 @@ python main.py --n 5 --regressor tree --ensemble adaboost
 |LinearSVR|0.8037|1.4728|1.2136|
 |DecisionTreeRegressor|0.7044|1.0577|1.0284|
 
+参数选择为 $n=10$
+使用以下命令运行实验
+```bash
+python main.py --n 10 --regressor svm --ensemble adaboost
+python main.py --n 10 --regressor tree --ensemble adaboost
+```
+
+|基回归器|MAE|MSE|RMSE|
+|---|---|---|---|
+|LinearSVR|0.7990|1.4784|1.2159|
+|DecisionTreeRegressor|0.6841|1.0968|1.0473|
+
 
 ## 实验分析
 
-## 实验讨论
+从实验结果我们可以看出，集成学习算法的确在一定程度上提高了基分类器的性能
+
+比较两个集成学习算法，我们可以看出 Adaboost 在大多数情况下都优于 Bagging ，这可能是因为 Adaboost 在训练过程中会调整样本的权重，使得错误的样本在后续的训练中得到更多的关注，从而提高了模型的泛化能力。
+
+同时，对比不同分类器个数的情况，我们可以看出，一般情况下，分类器个数越多，模型的性能越好，这可能是因为集成学习算法的本质是通过多个弱分类器的组合来构建一个强分类器，因此分类器个数越多，模型的性能越好。
+
+对比Bagging中不同的ratio选择，可以发现，对于svm，ratio=0.5的时候性能更好，而对于决策树，ratio=0.8的时候性能更好，这可能是因为svm对于数据的拟合能力更强，因此需要更多的随机性来提高模型的泛化能力。
