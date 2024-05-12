@@ -6,6 +6,7 @@ from utils import get_data
 from models import Baseline, Bagging, AdaBoost
 import sys
 
+# arg parser for command line arguments
 def arg_parser():
     parser = argparse.ArgumentParser()
     parser.add_argument('--n', type=int, default=10)
@@ -16,12 +17,12 @@ def arg_parser():
     parser.add_argument('--max_depth', type=int, default=20)
     return parser.parse_args()
 
-
 if __name__ == '__main__':
     args = arg_parser()
 
-    X_train, y_train, X_test, y_test = get_data()
+    X_train, y_train, X_test, y_test = get_data() # split data and transform text data to vectors
 
+    # select regressor
     if args.regressor == 'svm':
         regressor = svm.LinearSVR(random_state=0)
     elif args.regressor == 'tree':
@@ -29,6 +30,7 @@ if __name__ == '__main__':
     else:
         raise ValueError('Invalid regressor: {}'.format(args.regressor))
 
+    # select ensemble
     if args.ensemble == 'bagging':
         ensemble = Bagging(args.n, args.ratio, regressor)
     elif args.ensemble == 'adaboost':
@@ -38,9 +40,10 @@ if __name__ == '__main__':
     else:
         raise ValueError('Invalid ensemble: {}'.format(args.ensemble))
 
-    ensemble.fit(X_train, y_train)
-    y_pred = ensemble.predict(X_test)
+    ensemble.fit(X_train, y_train) # fit the ensemble model using the training data
+    y_pred = ensemble.predict(X_test) # predict the test data
 
+    # calculate metrics
     mae = np.mean(np.abs(y_pred - y_test))
     mse = np.mean((y_pred - y_test) ** 2)
     rmse = np.sqrt(mse)
