@@ -1,0 +1,15 @@
+姓名：方科晨
+学号：2021013400
+联系方式：fkc21@mails.tsinghua.edu.cn
+代码运行方式：
+可能需要安装的库：numpy, sklearn, pickle, pandas, argparse
+在命令行中运行：`python main.py [options]`
+options:
+	--n : 基回归器数量，默认为10
+	--ratio : Bagging中每个基回归器的训练集比例，默认为0.5
+	--regressor : 基回归器类型，默认为`svm`，可选`tree` `svm`
+	--vectorizer : 特征提取器类型，默认为`tfidf`，可选`count` `tfidf`
+	--ensemble : 集成学习方法，默认为`bagging`，可选`adaboosting` `bagging` `baseline`
+	--max_depth : 决策树最大深度，默认为20
+
+报告中的实验结果相应的运行命令位于报告相应位置中
