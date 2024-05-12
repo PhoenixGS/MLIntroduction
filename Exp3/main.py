@@ -1,4 +1,3 @@
-import csv
 from sklearn import svm, tree
 import numpy as np
 import argparse
